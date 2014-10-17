@@ -8,13 +8,45 @@
 import UIKit
 
 /**
+Returns the RGBA value of the provided ARGB color.
+
+:param: argb an ARGB Hex value
+
+:returns: the RGBA value of given color
+*/
+func WDConvertToRGBA(argb: UInt) -> UInt {
+    let sArgb = min(argb ,0xFFFFFFFF)
+    let alpha = (sArgb & 0xFF000000) >> 24
+    let red = (sArgb & 0x00FF0000) >> 16
+    let green = (sArgb & 0x0000FF00) >> 8
+    let blue = (sArgb & 0x000000FF)
+    return (red << 24) + (green << 16) + (blue << 8) + alpha
+}
+
+/**
+Returns the ARGB value of the provided RGBA color.
+
+:param: argb an RGBA Hex value
+
+:returns: the ARGB value of given color
+*/
+func WDConvertToARGB(rgba: UInt) -> UInt {
+    let sRgba = min(rgba ,0xFFFFFFFF)
+    let red = (sRgba & 0xFF000000) >> 24
+    let green = (sRgba & 0x00FF0000) >> 16
+    let blue = (sRgba & 0x0000FF00) >> 8
+    let alpha = (sRgba & 0x000000FF)
+    return (alpha << 24) + (red << 16) + (green << 8) + blue
+}
+
+/**
 Returns the color components of the provided color hex value.
 
 :param: rgba an RGBA Hex value (0x00000000).
 
 :returns: A tuple of intensity values for the color components (including alpha) associated with the specified color.
 */
-func WDDecomposeRGBA(rgba: UInt) -> (CGFloat, CGFloat, CGFloat, CGFloat){
+func WDDecomposeRGBA(rgba: UInt) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat){
     let sRgba = min(rgba,0xFFFFFFFF)
     let red: CGFloat = CGFloat((sRgba & 0xFF000000) >> 24) / 255.0
     let green: CGFloat = CGFloat((sRgba & 0x00FF0000) >> 16) / 255.0
@@ -31,7 +63,7 @@ Returns the color components of the provided color hex value.
 
 :returns: A tuple of intensity values for the color components (including alpha) associated with the specified color.
 */
-func WDDecomposeRGB(rgb: UInt) -> (CGFloat, CGFloat, CGFloat, CGFloat){
+func WDDecomposeRGB(rgb: UInt) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat){
     return WDDecomposeRGBA(rgb << 8 + 255)
 }
 
